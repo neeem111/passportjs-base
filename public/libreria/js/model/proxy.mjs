@@ -77,7 +77,7 @@ export class LibreriaProxy {
     }
   }
 
-  async updateUsuario(obj) {    
+  async updateUsuario(obj) {
     let response = await fetch('/api/usuarios/'+obj._id, {
       method: 'PUT',
       body: JSON.stringify(obj),

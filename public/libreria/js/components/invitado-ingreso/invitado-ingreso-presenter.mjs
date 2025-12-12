@@ -28,7 +28,7 @@ export class InvitadoIngresoPresenter extends Presenter {
       // 1. Autenticar y obtener el token
       let token = await this.model.autenticar(this.usuarioObject);
       
-      // 2. Guardar el token en la sesión
+      // 2. Guardar el token en la sesión (la respuesta es { token: 'jwt_string' })
       libreriaSession.setToken(token.token);
       
       // 3. Obtener el usuario actual usando el token
