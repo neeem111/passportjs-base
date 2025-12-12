@@ -33,6 +33,9 @@ export class Libreria {
   async setClientes(clientes) {
     await Usuario.deleteMany({});
     for (let cliente of clientes) {
+      if (cliente.password) {
+        cliente.password = await bcrypt.hash(cliente.password, 10);
+      }
       await new Usuario(cliente).save();
     }
   }
@@ -68,7 +71,13 @@ export class Libreria {
   }
 
   async updateUsuario(obj) {
+    if (!obj._id) {
+      throw new Error('ID de usuario requerido');
+    }
     let usuario = await Usuario.findById(obj._id);
+    if (!usuario) {
+      throw new Error('Usuario no encontrado');
+    }
     usuario.nombres = obj.nombres;
     usuario.apellidos = obj.apellidos;
     usuario.email = obj.email;
