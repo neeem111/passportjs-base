@@ -25,10 +25,22 @@ export class InvitadoIngresoPresenter extends Presenter {
   async ingresoClick(event) {
     event.preventDefault();
     try {
-      let usuario;
-      usuario = await this.model.autenticar(this.usuarioObject);
+      // 1. Autenticar y obtener el token
+      let token = await this.model.autenticar(this.usuarioObject);
+      
+      // 2. Guardar el token en la sesión
+      libreriaSession.setToken(token.token);
+      
+      // 3. Obtener el usuario actual usando el token
+      let usuario = await this.model.getUsuarioActual();
+      
+      // 4. Guardar información del usuario en la sesión
       libreriaSession.ingreso(usuario);
+      
+      // 5. Mostrar mensaje de bienvenida
       this.mensajesPresenter.mensaje(`Bienvenido ${usuario.nombres} ${usuario.apellidos}!`);
+      
+      // 6. Navegar a la página correspondiente según el rol
       if (libreriaSession.esCliente())
         await router.navigate('/libreria/cliente-perfil.html');
       else if (libreriaSession.esAdmin())
